@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const noteUid = require("short-unique-iduid");
+const uuid = require("./helpers/uuid");
 const noteData = require("./db/db.json");
 
 const app = express();
@@ -23,7 +23,13 @@ app.get("/notes", (req, res) =>
 );
 
 //get api route
-app.get("/api/notes", (req, res) => res.json(noteData));
+app.get("/api/notes", (req, res) => {
+  // Send a message to the client
+  res.json(`${req.method} request received to get notes`);
+
+  // Log our request to the terminal
+  console.info(`${req.method} request received to get notes`);
+});
 
 //post api route
 app.post("/api/notes", (req, res) => {
@@ -39,16 +45,43 @@ app.post("/api/notes", (req, res) => {
     const newNote = {
       title,
       text,
-      note_id: noteUid(),
+      note_id: uuid(),
     };
+
+    fs.readFile(".db/db.json", "utf8", (err, data) => {
+      if (err) {
+        console.error(err);
+      } else {
+        // Convert string into JSON object
+        const parsedNotes = JSON.parse(data);
+
+        // Add a new note
+        parsedNotes.push(newNote);
+
+        // Write updated reviews back to the file
+        fs.writeFile(
+          "./db/db.json",
+          //positional parameters
+          JSON.stringify(parsedNotes, null, 4),
+          (writeErr) =>
+            writeErr
+              ? console.error(writeErr)
+              : console.info("Successfully updated notes!")
+        );
+      }
+    });
 
     const response = {
       status: "success",
       body: newNote,
     };
+
+    console.log(response);
+    res.status(201).json(response);
+  } else {
+    res.status(500).json("Error in posting note");
   }
 });
-
 //delete api route
 
 app.listen(PORT, () =>
