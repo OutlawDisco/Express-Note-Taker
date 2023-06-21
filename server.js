@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const uuid = require("./helpers/uuid");
 const noteData = require("./db/db.json");
+const fs = require("fs");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -24,9 +25,16 @@ app.get("/notes", (req, res) =>
 
 //get api route
 app.get("/api/notes", (req, res) => {
-  // Send a message to the client
-  res.json(`${req.method} request received to get notes`);
-
+  fs.readFile("./db/db.json", "utf8", (err, data) => {
+    if (err) {
+      console.error(err);
+    } else {
+      // Convert string into JSON object
+      const parsedNotes = JSON.parse(data);
+      // Send a message to the client
+      res.json(parsedNotes);
+    }
+  });
   // Log our request to the terminal
   console.info(`${req.method} request received to get notes`);
 });
@@ -47,8 +55,8 @@ app.post("/api/notes", (req, res) => {
       text,
       note_id: uuid(),
     };
-
-    fs.readFile(".db/db.json", "utf8", (err, data) => {
+    //obtain existing notes
+    fs.readFile("./db/db.json", "utf8", (err, data) => {
       if (err) {
         console.error(err);
       } else {
@@ -58,7 +66,7 @@ app.post("/api/notes", (req, res) => {
         // Add a new note
         parsedNotes.push(newNote);
 
-        // Write updated reviews back to the file
+        // Write updated notes back to the file
         fs.writeFile(
           "./db/db.json",
           //positional parameters
