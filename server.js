@@ -90,7 +90,6 @@ app.post("/api/notes", (req, res) => {
     res.status(500).json("Error in posting note");
   }
 });
-//delete api route
 
 app.listen(PORT, () =>
   console.log(`Serving static asset routes on port ${PORT}!`)
