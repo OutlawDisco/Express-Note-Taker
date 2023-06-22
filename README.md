@@ -5,6 +5,8 @@ email:aoutlaw00@gmail.com
 
 ## Description
 
+This is modified starter code called Note Taker that can be used to write and save notes. The application uses Express.js to save and retrieve data from a JSON file.
+
 ## Installation
 
 npm i
