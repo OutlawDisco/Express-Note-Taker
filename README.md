@@ -15,7 +15,8 @@ npm i
 
 Express note taker
 
-Google drive link for video walk-through:
+heroku link:
+https://aol-notetaker-343e440f55f9.herokuapp.com/
 
 github repo link:
 
