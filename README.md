@@ -19,6 +19,7 @@ heroku link:
 https://aol-notetaker-343e440f55f9.herokuapp.com/
 
 github repo link:
+https://github.com/OutlawDisco/Express-Note-Taker
 
 ## Credits
 
